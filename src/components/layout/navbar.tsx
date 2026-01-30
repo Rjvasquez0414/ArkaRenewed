@@ -34,16 +34,20 @@ export function Navbar() {
   useEffect(() => {
     const supabase = createClient();
 
+    async function fetchProfile(userId: string) {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+      if (data && !error) setProfile(data);
+    }
+
     async function getUser() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUser(user);
-        const { data } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", user.id)
-          .single();
-        if (data) setProfile(data);
+        await fetchProfile(user.id);
       }
     }
 
@@ -53,12 +57,7 @@ export function Navbar() {
       async (_event, session) => {
         if (session?.user) {
           setUser(session.user);
-          const { data } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
-          if (data) setProfile(data);
+          await fetchProfile(session.user.id);
         } else {
           setUser(null);
           setProfile(null);
