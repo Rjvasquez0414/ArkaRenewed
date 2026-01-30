@@ -40,6 +40,7 @@ export function Navbar() {
         .select("*")
         .eq("id", userId)
         .single();
+      console.log("fetchProfile result:", { data, error });
       if (data && !error) setProfile(data);
     }
 
