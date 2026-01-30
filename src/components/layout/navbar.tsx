@@ -34,26 +34,20 @@ export function Navbar() {
   useEffect(() => {
     const supabase = createClient();
 
-    async function fetchProfile(userId: string) {
+    async function loadProfile() {
       try {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", userId)
-          .single();
-        if (data && !error) {
-          setProfile(data);
-        }
+        const res = await fetch("/api/profile");
+        const { profile: p } = await res.json();
+        if (p) setProfile(p);
       } catch (e) {
-        console.error("fetchProfile error:", e);
+        console.error("loadProfile error:", e);
       }
     }
 
-    // Use getSession for initial load (reads from cookie, no network request)
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
-        fetchProfile(session.user.id);
+        loadProfile();
       }
     });
 
@@ -61,7 +55,7 @@ export function Navbar() {
       async (_event, session) => {
         if (session?.user) {
           setUser(session.user);
-          await fetchProfile(session.user.id);
+          await loadProfile();
         } else {
           setUser(null);
           setProfile(null);
