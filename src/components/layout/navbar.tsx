@@ -35,24 +35,27 @@ export function Navbar() {
     const supabase = createClient();
 
     async function fetchProfile(userId: string) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-      console.log("fetchProfile result:", { data, error });
-      if (data && !error) setProfile(data);
-    }
-
-    async function getUser() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-        await fetchProfile(user.id);
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", userId)
+          .single();
+        if (data && !error) {
+          setProfile(data);
+        }
+      } catch (e) {
+        console.error("fetchProfile error:", e);
       }
     }
 
-    getUser();
+    // Use getSession for initial load (reads from cookie, no network request)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser(session.user);
+        fetchProfile(session.user.id);
+      }
+    });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
