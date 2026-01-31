@@ -33,7 +33,7 @@ export default function HomePage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="text-base px-8 border-secondary-foreground/20 text-secondary-foreground hover:bg-secondary-foreground/10" asChild>
+              <Button size="lg" variant="outline" className="text-base px-8 border-white/30 text-white hover:bg-white/10" asChild>
                 <Link href="/predicas">Ver prédicas</Link>
               </Button>
             </div>
@@ -70,6 +70,7 @@ export default function HomePage() {
                 description:
                   "Estudios estructurados con lecciones, materiales y certificados al completar.",
                 color: "bg-primary/10 text-primary",
+                border: "border-t-primary/40",
               },
               {
                 icon: Video,
@@ -77,6 +78,7 @@ export default function HomePage() {
                 description:
                   "Videos de prédicas dominicales y devocionales diarios para tu edificación.",
                 color: "bg-blue-100 text-blue-700",
+                border: "border-t-blue-400/40",
               },
               {
                 icon: Award,
@@ -84,6 +86,7 @@ export default function HomePage() {
                 description:
                   "Obtén certificados al completar cursos. Registra tu progreso espiritual.",
                 color: "bg-green-100 text-green-700",
+                border: "border-t-green-400/40",
               },
               {
                 icon: Heart,
@@ -91,9 +94,10 @@ export default function HomePage() {
                 description:
                   "Conecta con otros creyentes y comparte tu camino de fe.",
                 color: "bg-rose-100 text-rose-700",
+                border: "border-t-rose-400/40",
               },
             ].map((feature) => (
-              <Card key={feature.title} className="border-border/50 shadow-sm hover:shadow-md transition-shadow">
+              <Card key={feature.title} className={`border-border/50 border-t-2 ${feature.border} shadow-sm hover:shadow-lg transition-all hover:-translate-y-1`}>
                 <CardContent className="pt-6">
                   <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${feature.color}`}>
                     <feature.icon className="h-6 w-6" />
@@ -112,7 +116,7 @@ export default function HomePage() {
       {/* CTA - Verse of the day placeholder */}
       <section className="bg-cream py-16">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-border/50 bg-card p-8 shadow-sm sm:p-12">
+          <div className="rounded-2xl border border-primary/20 bg-card p-8 shadow-sm sm:p-12">
             <Cross className="mx-auto mb-4 h-8 w-8 text-primary" />
             <blockquote className="font-[family-name:var(--font-heading)] text-2xl font-medium italic text-foreground sm:text-3xl">
               &ldquo;Porque de tal manera amó Dios al mundo, que ha dado a su Hijo

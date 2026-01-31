@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, BookOpen, Video, Users, FolderOpen } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, Users, FolderOpen, Home } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -47,8 +47,15 @@ export default function AdminLayout({
 
       {/* Main content */}
       <div className="flex-1">
-        <header className="flex h-16 items-center border-b border-border px-6 lg:px-8">
+        <header className="flex h-16 items-center justify-between border-b border-border px-6 lg:px-8">
           <h1 className="text-lg font-semibold">Administración</h1>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+          >
+            <Home className="h-4 w-4" />
+            Ir al inicio
+          </Link>
         </header>
         <div className="p-6 lg:p-8">{children}</div>
       </div>
