@@ -283,3 +283,38 @@ export async function markLessonComplete(lessonId: string) {
   revalidatePath("/perfil/progreso");
   return { success: true };
 }
+
+export async function unenrollFromCourse(courseId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "No autenticado" };
+
+  // Delete progress for lessons in this course
+  const { data: lessons } = await supabase
+    .from("lessons")
+    .select("id")
+    .eq("course_id", courseId);
+
+  if (lessons && lessons.length > 0) {
+    await supabase
+      .from("user_lesson_progress")
+      .delete()
+      .eq("user_id", user.id)
+      .in("lesson_id", lessons.map((l) => l.id));
+  }
+
+  // Delete enrollment
+  const { error } = await supabase
+    .from("user_course_enrollments")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("course_id", courseId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath("/perfil/progreso");
+  revalidatePath("/cursos");
+  return { success: true };
+}

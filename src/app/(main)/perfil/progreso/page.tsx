@@ -6,8 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, CheckCircle, ArrowRight } from "lucide-react";
+import { UnenrollButton } from "@/components/courses/unenroll-button";
 
-export const metadata = { title: "Mi Progreso" };
+export const metadata = { title: "Mis Cursos" };
 
 export default async function ProgresoPage() {
   const supabase = await createClient();
@@ -44,7 +45,7 @@ export default async function ProgresoPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold">Mi Progreso</h1>
+      <h1 className="font-[family-name:var(--font-heading)] text-2xl font-bold">Mis Cursos</h1>
 
       {enrollmentsWithProgress.length === 0 ? (
         <Card>
@@ -81,14 +82,22 @@ export default async function ProgresoPage() {
                       <p className="mt-1 text-xs text-muted-foreground text-right">{enrollment.progress}%</p>
                     </div>
                   </div>
-                  {enrollment.course?.category && (
-                    <Link
-                      href={`/cursos/${enrollment.course.category.slug}/${enrollment.course.slug}`}
-                      className="ml-4 text-primary hover:text-primary/80"
-                    >
-                      <ArrowRight className="h-5 w-5" />
-                    </Link>
-                  )}
+                  <div className="ml-4 flex flex-col items-end gap-2">
+                    {enrollment.course?.category && (
+                      <Link
+                        href={`/cursos/${enrollment.course.category.slug}/${enrollment.course.slug}`}
+                        className="text-primary hover:text-primary/80"
+                      >
+                        <ArrowRight className="h-5 w-5" />
+                      </Link>
+                    )}
+                    {!enrollment.completed_at && (
+                      <UnenrollButton
+                        courseId={enrollment.course_id}
+                        courseTitle={enrollment.course?.title ?? ""}
+                      />
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
