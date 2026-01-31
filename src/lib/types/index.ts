@@ -50,9 +50,17 @@ export interface Lesson {
   text_content: string | null;
   pdf_url: string | null;
   duration_minutes: number | null;
+  supplementary_video_url: string | null;
+  attachments: LessonAttachment[];
   is_published: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface LessonAttachment {
+  name: string;
+  url: string;
+  type: string;
 }
 
 export interface Quiz {

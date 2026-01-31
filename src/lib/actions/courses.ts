@@ -143,6 +143,8 @@ export async function createLesson(courseId: string, formData: FormData) {
   const textContent = formData.get("text_content") as string;
   const pdfUrl = formData.get("pdf_url") as string;
   const duration = formData.get("duration_minutes") as string;
+  const supplementaryVideoUrl = formData.get("supplementary_video_url") as string;
+  const attachmentsJson = formData.get("attachments") as string;
 
   // Get next sort order
   const { data: existing } = await supabase
@@ -164,6 +166,8 @@ export async function createLesson(courseId: string, formData: FormData) {
     text_content: textContent || null,
     pdf_url: pdfUrl || null,
     duration_minutes: duration ? parseInt(duration) : null,
+    supplementary_video_url: supplementaryVideoUrl || null,
+    attachments: attachmentsJson ? JSON.parse(attachmentsJson) : [],
     is_published: true,
   });
 
@@ -180,6 +184,8 @@ export async function updateLesson(lessonId: string, formData: FormData) {
   const textContent = formData.get("text_content") as string;
   const pdfUrl = formData.get("pdf_url") as string;
   const duration = formData.get("duration_minutes") as string;
+  const supplementaryVideoUrl = formData.get("supplementary_video_url") as string;
+  const attachmentsJson = formData.get("attachments") as string;
 
   const { error } = await supabase
     .from("lessons")
@@ -191,6 +197,8 @@ export async function updateLesson(lessonId: string, formData: FormData) {
       text_content: textContent || null,
       pdf_url: pdfUrl || null,
       duration_minutes: duration ? parseInt(duration) : null,
+      supplementary_video_url: supplementaryVideoUrl || null,
+      attachments: attachmentsJson ? JSON.parse(attachmentsJson) : [],
     })
     .eq("id", lessonId);
 
